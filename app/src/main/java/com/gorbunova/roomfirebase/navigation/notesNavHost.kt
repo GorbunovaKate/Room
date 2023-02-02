@@ -5,11 +5,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gorbunova.roomfirebase.MainViewModel
-import com.gorbunova.roomfirebase.model.Note
 import com.gorbunova.roomfirebase.screens.AddScreen
 import com.gorbunova.roomfirebase.screens.MainScreen
 import com.gorbunova.roomfirebase.screens.NoteScreen
 import com.gorbunova.roomfirebase.screens.StartScreen
+import com.gorbunova.roomfirebase.utils.Constants
 
 sealed class NavRoute(val route: String) {
     object Start: NavRoute("start_screen")
@@ -26,6 +26,8 @@ fun NotesNavHost(mViewModel: MainViewModel) {
         composable(NavRoute.Start.route) { StartScreen(navController = navController, viewModel = mViewModel) }
         composable(NavRoute.Main.route) { MainScreen(navController = navController, viewModel = mViewModel) }
         composable(NavRoute.Add.route) { AddScreen(navController = navController, viewModel = mViewModel) }
-        composable(NavRoute.Note.route) { NoteScreen(navController = navController, viewModel = mViewModel) }
+        composable(NavRoute.Note.route + "/{${Constants.Keys.ID}}") { backStackEntry ->
+            NoteScreen(navController = navController, viewModel = mViewModel, noteId = backStackEntry.arguments?.getString(Constants.Keys.ID))
+        }
     }
 }
